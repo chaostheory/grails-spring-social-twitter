@@ -1,0 +1,7 @@
+.svn
+.idea/
+*.iml
+plugin.xml
+target/
+*.zip
+*.tld
