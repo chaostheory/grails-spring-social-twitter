@@ -15,7 +15,7 @@
  */
 package grails.plugins.springsocial.twitter;
 
-import grails.plugins.springsocial.config.ReflectionUtils;
+import grails.plugins.springsocial.config.TwitterReflectionUtils;
 import grails.util.Environment;
 import groovy.lang.GroovyClassLoader;
 import groovy.util.ConfigObject;
@@ -66,7 +66,7 @@ public final class SpringSocialTwitterUtils {
      * Force a reload of the springsocial configuration.
      */
     public static void reloadConfig() {
-        mergeConfig(ReflectionUtils.getConfig(), "DefaultSpringSocialTwitterConfig");
+        mergeConfig(TwitterReflectionUtils.getConfig(), "DefaultSpringSocialTwitterConfig");
     }
 
 
@@ -88,7 +88,7 @@ public final class SpringSocialTwitterUtils {
         }
 
         config = mergeConfig(currentConfig, (ConfigObject) secondaryConfig.getProperty("springsocial"));
-        ReflectionUtils.setConfig(config);
+        TwitterReflectionUtils.setConfig(config);
     }
 
     /**
