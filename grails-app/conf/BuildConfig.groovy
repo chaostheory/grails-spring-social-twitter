@@ -42,11 +42,9 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // runtime 'mysql:mysql-connector-java:5.1.13'
-        runtime("org.springframework.social:spring-social-twitter:${springSocialVersion}") { transitive = false }
+        compile("org.springframework.social:spring-social-twitter:${springSocialVersion}") { transitive = false }
     }
     plugins {
-        runtime (":spring-social-core:0.1.1")
+        runtime (":spring-social-core:0.1.2")
     }
 }
