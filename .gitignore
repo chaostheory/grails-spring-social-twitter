@@ -5,3 +5,6 @@ plugin.xml
 target/
 *.zip
 *.tld
+.classpath
+.project
+.settings/
