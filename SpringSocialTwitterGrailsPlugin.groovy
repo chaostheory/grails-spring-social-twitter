@@ -2,7 +2,7 @@ class SpringSocialTwitterGrailsPlugin {
     // the plugin version
     def version = "0.1"
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "1.3.7 > *"
+    def grailsVersion = "1.3 > *"
     // the other plugins this plugin depends on
     def dependsOn = [:]
     // resources that are excluded from plugin packaging
@@ -10,12 +10,11 @@ class SpringSocialTwitterGrailsPlugin {
             "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
-    def author = "Your name"
-    def authorEmail = ""
-    def title = "Plugin summary/headline"
+	def author = "Domingo Suarez Torres"
+    def authorEmail = "domingo.suarez@gmail.com"
+    def title = "Spring Social Twitter"
     def description = '''\\
-Brief description of the plugin.
+Spring Social Twitter plugin.
 '''
 
     // URL to the plugin's documentation
@@ -27,6 +26,8 @@ Brief description of the plugin.
 
     def doWithSpring = {
         // TODO Implement runtime spring config (optional)
+		xmlns context: "http://www.springframework.org/schema/context"
+        context.'component-scan'('base-package': "grails.plugins.springsocial.config.twitter")
     }
 
     def doWithDynamicMethods = { ctx ->
