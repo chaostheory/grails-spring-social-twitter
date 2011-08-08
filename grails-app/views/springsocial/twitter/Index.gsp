@@ -1,8 +1,7 @@
 <html>
 <head>
     <title>Twitter Profile</title>
-    <parameter name="leftMenu" value="/springsocial/twitter/menu"/>
-    <meta name='layout' content='springSocialMain'/>
+    <meta name='layout' content='twitterLayout'/>
 </head>
 
 <body>

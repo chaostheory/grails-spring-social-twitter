@@ -1,8 +1,7 @@
 <html>
 <head>
     <title>Twitter Messages</title>
-    <parameter name="leftMenu" value="/springsocial/twitter/menu"/>
-    <meta name='layout' content='springSocialMain'/>
+    <meta name='layout' content='twitterLayout'/>
 </head>
 
 <body>
