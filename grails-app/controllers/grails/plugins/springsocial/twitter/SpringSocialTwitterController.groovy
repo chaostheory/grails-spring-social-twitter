@@ -18,127 +18,113 @@ import org.springframework.social.twitter.api.Twitter
 
 class SpringSocialTwitterController {
 
-    def springSecurityService
-    def twitter
-    def connectionRepository
+  def springSecurityService
+  def twitter
+  def connectionRepository
 
-    def beforeInterceptor = [action:this.&auth,except:'login']
+  def beforeInterceptor = [action:this.&auth,except:'login']
 
-    def index = {
+  def index = {
+    def model = ["profile": getTwitterApi().userOperations().getUserProfile()]
+    render(view: "/springsocial/twitter/index", model: model)
+  }
 
-            def model = ["profile": getTwitterApi().userOperations().getUserProfile()]
-            render(view: "/springsocial/twitter/index", model: model)
-
+  def timeline = {
+    def id = params.id ?: "home"
+    def tweets
+    switch (id) {
+      case "home":
+        tweets = getTwitterApi().timelineOperations().getHomeTimeline()
+        break
+      case "user":
+        tweets = getTwitterApi().timelineOperations().getUserTimeline()
+        break
+      case "public":
+        tweets = getTwitterApi().timelineOperations().getPublicTimeline()
+        break
+      case "mentions":
+        tweets = getTwitterApi().timelineOperations().getMentions()
+        break
+      case "favorites":
+        tweets = getTwitterApi().timelineOperations().getFavorites()
+        break
+      default:
+        tweets = getTwitterApi().timelineOperations().getHomeTimeline()
+        break
     }
 
-    def timeline = {
+    render view: SpringSocialTwitterUtils.config.twitter.page.timeLine, model: ['timeline': tweets]
 
-            def id = params.id ?: "home"
-            def tweets
-            switch (id) {
-                case "home":
-                    tweets = getTwitterApi().timelineOperations().getHomeTimeline()
-                    break
-                case "user":
-                    tweets = getTwitterApi().timelineOperations().getUserTimeline()
-                    break
-                case "public":
-                    tweets = getTwitterApi().timelineOperations().getPublicTimeline()
-                    break
-                case "mentions":
-                    tweets = getTwitterApi().timelineOperations().getMentions()
-                    break
-                case "favorites":
-                    tweets = getTwitterApi().timelineOperations().getFavorites()
-                    break
-                default:
-                    tweets = getTwitterApi().timelineOperations().getHomeTimeline()
-                    break
-            }
+  }
 
-            render view: SpringSocialTwitterUtils.config.twitter.page.timeLine, model: ['timeline': tweets]
-
+  def profiles = {
+    def id = params.id ?: "friends"
+    def profiles
+    switch (id) {
+      case "friends":
+        profiles = getTwitterApi().friendOperations().getFriends()
+        break
+      case "followers":
+        profiles = getTwitterApi().friendOperations().getFollowers()
+        break
+      default:
+        profiles = getTwitterApi().friendOperations().getFriends()
+        break
     }
+    render view: SpringSocialTwitterUtils.config.twitter.page.profiles, model: ['profiles': profiles]
+  }
 
-    def profiles = {
-
-            def id = params.id ?: "friends"
-            def profiles
-            switch (id) {
-                case "friends":
-                    profiles = getTwitterApi().friendOperations().getFriends()
-                    break
-                case "followers":
-                    profiles = getTwitterApi().friendOperations().getFollowers()
-                    break
-                default:
-                    profiles = getTwitterApi().friendOperations().getFriends()
-                    break
-            }
-            render view: SpringSocialTwitterUtils.config.twitter.page.profiles, model: ['profiles': profiles]
-
+  def messages = {
+    def dmListType = params.id ?: 'received'
+    def directMessages
+    switch (dmListType) {
+      case 'received':
+        directMessages = getTwitterApi().directMessageOperations().getDirectMessagesReceived()
+        break
+      case 'sent':
+        directMessages = getTwitterApi().directMessageOperations().getDirectMessagesSent()
+        break
+      default:
+        directMessages = getTwitterApi().directMessageOperations().getDirectMessagesReceived()
+        break
     }
+    render view: SpringSocialTwitterUtils.config.twitter.page.directMessages, model: ['directMessages': directMessages, 'dmListType': dmListType]
+  }
 
-    def messages = {
+  def trends = {
+    def trends = getTwitterApi().searchOperations().getCurrentTrends()
+    render view: SpringSocialTwitterUtils.config.twitter.page.trends, model: ['trends': trends]
+  }
 
-            def dmListType = params.id ?: 'received'
-            def directMessages
-            switch (dmListType) {
-                case 'received':
-                    directMessages = getTwitterApi().directMessageOperations().getDirectMessagesReceived()
-                    break
-                case 'sent':
-                    directMessages = getTwitterApi().directMessageOperations().getDirectMessagesSent()
-                    break
-                default:
-                    directMessages = getTwitterApi().directMessageOperations().getDirectMessagesReceived()
-                    break
-            }
+  def tweet = {
+    def message = params.message
+    getTwitterApi().timelineOperations().updateStatus(message)
+    redirect(action: timeline, params: [id: 'user'])
+  }
 
-            render view: SpringSocialTwitterUtils.config.twitter.page.directMessages, model: ['directMessages': directMessages, 'dmListType': dmListType]
+  def search = {
+    def query = params.query
+    def tweets = getTwitterApi().searchOperations().search(query).getTweets()
+    flash.message = "Search result for '${query}'"
+    render view: SpringSocialTwitterUtils.config.twitter.page.timeLine, model: ['timeline': tweets]
+  }
 
+  def login = {
+    render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
+  }
+
+  def auth(){
+    if(!isConnected()){
+      redirect(action:'login')
+      return false
     }
+  }
 
-    def trends = {
-            def trends = getTwitterApi().searchOperations().getCurrentTrends()
-            render view: SpringSocialTwitterUtils.config.twitter.page.trends, model: ['trends': trends]
+  Boolean isConnected() {
+    connectionRepository.findPrimaryConnection(Twitter.class)
+  }
 
-    }
-
-    def tweet = {
-
-            def message = params.message
-            getTwitterApi().timelineOperations().updateStatus(message)
-            redirect(action: timeline, params: [id: 'user'])
-
-    }
-
-    def search = {
-
-            def query = params.query
-            def tweets = getTwitterApi().searchOperations().search(query).getTweets()
-            flash.message = "Search result for '${query}'"
-            render view: SpringSocialTwitterUtils.config.twitter.page.timeLine, model: ['timeline': tweets]
-
-    }
-
-    def login = {
-        def model = ["profile": getTwitterApi().userOperations().getUserProfile()]
-        render(view: "/springsocial/twitter/index", model: model)
-    }
-
-    def auth(){
-      if(!isConnected()){
-        redirect(action:'login')
-        return false
-      }
-    }
-
-    Boolean isConnected() {
-        connectionRepository.findPrimaryConnection(Twitter.class)
-    }
-
-    private Twitter getTwitterApi() {
-        twitter
-    }
+  private Twitter getTwitterApi() {
+    twitter
+  }
 }
