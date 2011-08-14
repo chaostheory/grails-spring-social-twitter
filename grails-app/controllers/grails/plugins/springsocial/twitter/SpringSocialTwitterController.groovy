@@ -22,17 +22,17 @@ class SpringSocialTwitterController {
     def twitter
     def connectionRepository
 
+    def beforeInterceptor = [action:this.&auth,except:'login']
+
     def index = {
-        if (isConnected()) {
+
             def model = ["profile": getTwitterApi().userOperations().getUserProfile()]
             render(view: "/springsocial/twitter/index", model: model)
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
     }
 
     def timeline = {
-        if (isConnected()) {
+
             def id = params.id ?: "home"
             def tweets
             switch (id) {
@@ -57,13 +57,11 @@ class SpringSocialTwitterController {
             }
 
             render view: SpringSocialTwitterUtils.config.twitter.page.timeLine, model: ['timeline': tweets]
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
     }
 
     def profiles = {
-        if (isConnected()) {
+
             def id = params.id ?: "friends"
             def profiles
             switch (id) {
@@ -78,13 +76,11 @@ class SpringSocialTwitterController {
                     break
             }
             render view: SpringSocialTwitterUtils.config.twitter.page.profiles, model: ['profiles': profiles]
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
     }
 
     def messages = {
-        if (isConnected()) {
+
             def dmListType = params.id ?: 'received'
             def directMessages
             switch (dmListType) {
@@ -100,40 +96,42 @@ class SpringSocialTwitterController {
             }
 
             render view: SpringSocialTwitterUtils.config.twitter.page.directMessages, model: ['directMessages': directMessages, 'dmListType': dmListType]
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
     }
 
     def trends = {
-
-        if (isConnected()) {
             def trends = getTwitterApi().searchOperations().getCurrentTrends()
             render view: SpringSocialTwitterUtils.config.twitter.page.trends, model: ['trends': trends]
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
     }
 
     def tweet = {
-        if (isConnected()) {
+
             def message = params.message
             getTwitterApi().timelineOperations().updateStatus(message)
             redirect(action: timeline, params: [id: 'user'])
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
     }
 
     def search = {
-        if (isConnected()) {
+
             def query = params.query
             def tweets = getTwitterApi().searchOperations().search(query).getTweets()
             flash.message = "Search result for '${query}'"
             render view: SpringSocialTwitterUtils.config.twitter.page.timeLine, model: ['timeline': tweets]
-        } else {
-            render(view: SpringSocialTwitterUtils.config.twitter.page.connect)
-        }
+
+    }
+
+    def login = {
+        def model = ["profile": getTwitterApi().userOperations().getUserProfile()]
+        render(view: "/springsocial/twitter/index", model: model)
+    }
+
+    def auth(){
+      if(!isConnected()){
+        redirect(action:'login')
+        return false
+      }
     }
 
     Boolean isConnected() {
