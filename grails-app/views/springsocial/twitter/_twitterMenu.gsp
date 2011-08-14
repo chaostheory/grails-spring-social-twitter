@@ -1,7 +1,7 @@
 
 
 
-<h4><g:link controller="springSocialTwitter">Twitter</g:link></h4>
+<div id="network"><g:link controller="springSocialTwitter">Twitter</g:link></div>
 
     <ul class="menu">
         <li><g:link controller="springSocialTwitter">User Profile</g:link></li>

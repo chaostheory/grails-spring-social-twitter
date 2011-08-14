@@ -17,13 +17,13 @@
 
 <h4>Post a tweet</h4>
 
-<g:form controller="springSocialTwitter" action="tweet">
+<g:form controller="springSocialTwitter" action="tweet" name="sendMessage">
     <g:textArea name="message" rows="2" cols="80" />
     <g:submitButton name="submit" value="Send Tweet"/>
 </g:form>
 
 
-<g:form controller="springSocialTwitter" action="search">
+<g:form controller="springSocialTwitter" action="search" name="search">
     <g:textField name="query"/><br/>
     <g:submitButton name="submit" value="Search"/>
 </g:form>
