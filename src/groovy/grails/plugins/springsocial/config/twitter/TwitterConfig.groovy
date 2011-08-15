@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.social.connect.Connection
 import org.springframework.social.connect.ConnectionFactoryLocator
 import org.springframework.social.connect.ConnectionRepository
 import org.springframework.social.connect.support.ConnectionFactoryRegistry
@@ -36,19 +35,19 @@ class TwitterConfig {
     ConnectionRepository connectionRepository
 
     @Bean
-    String foo() {
+    String fooTwitter() {
         println "Configuring SpringSocial Twitter"
         def twitterConfig = SpringSocialTwitterUtils.config.twitter
         def consumerKey = twitterConfig.consumerKey
         def consumerSecret = twitterConfig.consumerSecret
         ((ConnectionFactoryRegistry) connectionFactoryLocator).addConnectionFactory(new TwitterConnectionFactory(consumerKey, consumerSecret))
-        "jajajaj"
+        "twitter"
     }
 
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
     public Twitter twitter() {
-        Connection<Twitter> twitter = connectionRepository.findPrimaryConnection(Twitter.class)
+        def twitter = connectionRepository.findPrimaryConnection(Twitter)
         twitter != null ? twitter.getApi() : new TwitterTemplate()
     }
 }
