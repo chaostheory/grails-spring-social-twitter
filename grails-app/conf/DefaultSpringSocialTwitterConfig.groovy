@@ -6,4 +6,5 @@ springsocial {
     twitter.page.profiles = "/springsocial/twitter/profiles"
     twitter.page.directMessages = "/springsocial/twitter/messages"
     twitter.page.trends = "/springsocial/twitter/trends"
+    twitter.page.deniedHome = "/springSocialTwitter/login"
 }
