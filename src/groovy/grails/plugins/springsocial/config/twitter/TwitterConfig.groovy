@@ -34,8 +34,6 @@ import org.springframework.util.Assert
 @Configuration
 class TwitterConfig {
   @Inject
-  ConnectionFactoryLocator connectionFactoryLocator
-  @Inject
   ConnectionRepository connectionRepository
 
   @Bean
@@ -50,14 +48,8 @@ class TwitterConfig {
   }
 
   @Bean
-  String fooTwitter() {
-    ((ConnectionFactoryRegistry) connectionFactoryLocator).addConnectionFactory(twitterConnectionFactory())
-    "twitter"
-  }
-
-  @Bean
   @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-  public Twitter twitter() {
+  Twitter twitter() {
     def twitter = connectionRepository.findPrimaryConnection(Twitter)
     twitter != null ? twitter.getApi() : new TwitterTemplate()
   }
