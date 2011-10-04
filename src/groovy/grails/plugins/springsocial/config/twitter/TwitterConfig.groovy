@@ -14,40 +14,51 @@
  */
 package grails.plugins.springsocial.config.twitter
 
-import grails.plugins.springsocial.twitter.SpringSocialTwitterUtils
 import javax.inject.Inject
+
+import org.springframework.social.connect.ConnectionFactoryLocator
+import org.springframework.social.connect.ConnectionRepository
+import org.springframework.social.connect.support.ConnectionFactoryRegistry
+import org.springframework.social.connect.ConnectionFactory
+
+import grails.plugins.springsocial.twitter.SpringSocialTwitterUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.social.connect.ConnectionFactoryLocator
-import org.springframework.social.connect.ConnectionRepository
-import org.springframework.social.connect.support.ConnectionFactoryRegistry
 import org.springframework.social.twitter.api.Twitter
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.twitter.connect.TwitterConnectionFactory
+import org.springframework.util.Assert
 
 @Configuration
 class TwitterConfig {
-    @Inject
-    ConnectionFactoryLocator connectionFactoryLocator
-    @Inject
-    ConnectionRepository connectionRepository
+  @Inject
+  ConnectionFactoryLocator connectionFactoryLocator
+  @Inject
+  ConnectionRepository connectionRepository
 
-    @Bean
-    String fooTwitter() {
-        println "Configuring SpringSocial Twitter"
-        def twitterConfig = SpringSocialTwitterUtils.config.twitter
-        def consumerKey = twitterConfig.consumerKey
-        def consumerSecret = twitterConfig.consumerSecret
-        ((ConnectionFactoryRegistry) connectionFactoryLocator).addConnectionFactory(new TwitterConnectionFactory(consumerKey, consumerSecret))
-        "twitter"
-    }
+  @Bean
+  ConnectionFactory twitterConnectionFactory() {
+    println "Configuring SpringSocial Twitter"
+    def twitterConfig = SpringSocialTwitterUtils.config.twitter
+    def consumerKey = twitterConfig.consumerKey
+    def consumerSecret = twitterConfig.consumerSecret
+    Assert.hasText(consumerKey, "The Twitter consumerKey is necessary, please add to the Config.groovy as follows: grails.plugins.springsocial.twitter.consumerKey='yourConsumerKey'")
+    Assert.hasText(consumerSecret, "The Twitter consumerSecret is necessary, please add to the Config.groovy as follows: grails.plugins.springsocial.twitter.consumerSecret='yourConsumerSecret'")
+    new TwitterConnectionFactory(consumerKey, consumerSecret)
+  }
 
-    @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public Twitter twitter() {
-        def twitter = connectionRepository.findPrimaryConnection(Twitter)
-        twitter != null ? twitter.getApi() : new TwitterTemplate()
-    }
+  @Bean
+  String fooTwitter() {
+    ((ConnectionFactoryRegistry) connectionFactoryLocator).addConnectionFactory(twitterConnectionFactory())
+    "twitter"
+  }
+
+  @Bean
+  @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
+  public Twitter twitter() {
+    def twitter = connectionRepository.findPrimaryConnection(Twitter)
+    twitter != null ? twitter.getApi() : new TwitterTemplate()
+  }
 }
