@@ -1,10 +1,10 @@
 class SpringSocialTwitterGrailsPlugin {
   // the plugin version
-  def version = "0.1.8"
+  def version = "0.1.9"
   // the version or versions of Grails the plugin is designed for
   def grailsVersion = "1.3.0 > *"
   // the other plugins this plugin depends on
-  Map dependsOn = ['springSocialCore': '0.1.8 > *']
+  Map dependsOn = ['springSocialCore': '0.1.9 > *']
   // resources that are excluded from plugin packaging
   def pluginExcludes = [
       "grails-app/views/error.gsp"
@@ -16,6 +16,7 @@ class SpringSocialTwitterGrailsPlugin {
   def description = '''\\
 Spring Social Twitter plugin.
 '''
+
 
   // URL to the plugin's documentation
   def documentation = "http://grails.org/plugin/spring-social-twitter"

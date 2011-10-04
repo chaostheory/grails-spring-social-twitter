@@ -42,4 +42,7 @@ grails.project.dependency.resolution = {
     // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
     compile("org.springframework.social:spring-social-twitter:${springSocialVersion}") { transitive = false }
   }
+  plugins {
+    compile(":spring-social-core:0.1.9")
+  }
 }
