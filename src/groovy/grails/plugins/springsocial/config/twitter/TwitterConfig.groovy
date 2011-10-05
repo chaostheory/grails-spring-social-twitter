@@ -40,8 +40,8 @@ class TwitterConfig {
   ConnectionFactory twitterConnectionFactory() {
     println "Configuring SpringSocial Twitter"
     def twitterConfig = SpringSocialTwitterUtils.config.twitter
-    def consumerKey = twitterConfig.consumerKey
-    def consumerSecret = twitterConfig.consumerSecret
+    String consumerKey = twitterConfig.consumerKey ?: ""
+    String consumerSecret = twitterConfig.consumerSecret ?: ""
     Assert.hasText(consumerKey, "The Twitter consumerKey is necessary, please add to the Config.groovy as follows: grails.plugins.springsocial.twitter.consumerKey='yourConsumerKey'")
     Assert.hasText(consumerSecret, "The Twitter consumerSecret is necessary, please add to the Config.groovy as follows: grails.plugins.springsocial.twitter.consumerSecret='yourConsumerSecret'")
     new TwitterConnectionFactory(consumerKey, consumerSecret)
