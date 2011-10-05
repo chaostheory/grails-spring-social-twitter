@@ -1,6 +1,6 @@
 class SpringSocialTwitterGrailsPlugin {
   // the plugin version
-  String version = "0.1.22"
+  String version = "0.1.23"
   // the version or versions of Grails the plugin is designed for
   String grailsVersion = "1.3.0 > *"
   // the other plugins this plugin depends on

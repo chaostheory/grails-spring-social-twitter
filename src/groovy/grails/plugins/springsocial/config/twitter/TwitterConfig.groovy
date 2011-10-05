@@ -39,7 +39,7 @@ class TwitterConfig {
   ConnectionFactoryLocator connectionFactoryLocator
 
   @Bean
-  ConnectionFactory twitterConnectionFactory() {
+  String fooTwitter() {
     println "Configuring SpringSocial Twitter"
     def twitterConfig = SpringSocialTwitterUtils.config.twitter
     String consumerKey = twitterConfig.consumerKey ?: ""
@@ -50,7 +50,7 @@ class TwitterConfig {
 
     ((ConnectionFactoryRegistry) connectionFactoryLocator).addConnectionFactory(twitterConnectionFactory)
 
-    twitterConnectionFactory
+    "twitter"
   }
 
   @Bean
