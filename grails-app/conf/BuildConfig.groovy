@@ -39,11 +39,10 @@ grails.project.dependency.resolution = {
     mavenRepo "http://maven.springframework.org/milestone"
   }
   dependencies {
-    // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
     compile("org.springframework.social:spring-social-twitter:${springSocialVersion}") { transitive = false }
   }
   plugins {
     compile(":spring-security-core:1.2.1")
-    compile(":spring-social-core:0.1.20")
+    compile(":spring-social-core:0.1.21")
   }
 }
