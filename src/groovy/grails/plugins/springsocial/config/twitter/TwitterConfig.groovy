@@ -35,22 +35,16 @@ import org.springframework.util.Assert
 class TwitterConfig {
   @Inject
   ConnectionRepository connectionRepository
-  @Inject
-  ConnectionFactoryLocator connectionFactoryLocator
 
   @Bean
-  String fooTwitter() {
+  ConnectionFactory twitterConnectionFactory() {
     println "Configuring SpringSocial Twitter"
     def twitterConfig = SpringSocialTwitterUtils.config.twitter
     String consumerKey = twitterConfig.consumerKey ?: ""
     String consumerSecret = twitterConfig.consumerSecret ?: ""
     Assert.hasText(consumerKey, "The Twitter consumerKey is necessary, please add to the Config.groovy as follows: grails.plugins.springsocial.twitter.consumerKey='yourConsumerKey'")
     Assert.hasText(consumerSecret, "The Twitter consumerSecret is necessary, please add to the Config.groovy as follows: grails.plugins.springsocial.twitter.consumerSecret='yourConsumerSecret'")
-    ConnectionFactory twitterConnectionFactory = new TwitterConnectionFactory(consumerKey, consumerSecret)
-
-    ((ConnectionFactoryRegistry) connectionFactoryLocator).addConnectionFactory(twitterConnectionFactory)
-
-    "twitter"
+    new TwitterConnectionFactory(consumerKey, consumerSecret)
   }
 
   @Bean
