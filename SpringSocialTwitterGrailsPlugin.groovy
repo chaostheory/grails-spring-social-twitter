@@ -1,10 +1,10 @@
 class SpringSocialTwitterGrailsPlugin {
   // the plugin version
-  String version = "0.1.26"
+  String version = "0.1.27"
   // the version or versions of Grails the plugin is designed for
   String grailsVersion = "1.3.0 > *"
   // the other plugins this plugin depends on
-  Map dependsOn = ['springSocialCore': '0.1.26 > *']
+  Map dependsOn = ['springSocialCore': '0.1.27 > *']
   // resources that are excluded from plugin packaging
   List pluginExcludes = [
       "grails-app/views/error.gsp"
