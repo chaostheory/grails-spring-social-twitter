@@ -43,6 +43,6 @@ grails.project.dependency.resolution = {
   }
   plugins {
     compile(":spring-security-core:1.2.1")
-    compile(":spring-social-core:0.1.28")
+    compile(":spring-social-core:0.1.30")
   }
 }
