@@ -120,7 +120,7 @@ class SpringSocialTwitterController {
     }
 
     Boolean isConnected() {
-        connectionRepository.findPrimaryConnection(Twitter.class)
+        connectionRepository.findPrimaryConnection(Twitter)
     }
 
 }
