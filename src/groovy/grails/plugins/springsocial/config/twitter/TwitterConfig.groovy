@@ -14,18 +14,14 @@
  */
 package grails.plugins.springsocial.config.twitter
 
-import javax.inject.Inject
-
-import org.springframework.social.connect.ConnectionFactoryLocator
-import org.springframework.social.connect.ConnectionRepository
-import org.springframework.social.connect.support.ConnectionFactoryRegistry
-import org.springframework.social.connect.ConnectionFactory
-
 import grails.plugins.springsocial.twitter.SpringSocialTwitterUtils
+import javax.inject.Inject
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
+import org.springframework.social.connect.ConnectionFactory
+import org.springframework.social.connect.ConnectionRepository
 import org.springframework.social.twitter.api.Twitter
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.twitter.connect.TwitterConnectionFactory

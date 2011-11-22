@@ -25,50 +25,50 @@ import grails.plugins.springsocial.twitter.SpringSocialTwitterUtils
  */
 class TwitterReflectionUtils {
 
-    private TwitterReflectionUtils() {
-        // static only
+  private TwitterReflectionUtils() {
+    // static only
+  }
+
+  static getConfigProperty(String name) {
+    def value = SpringSocialTwitterUtils.config
+    for (String part in name.split('\\.')) {
+      value = value."$part"
+    }
+    value
+  }
+
+  static void setConfigProperty(String name, value) {
+    def config = SpringSocialTwitterUtils.config
+    def parts = name.split('\\.') as List
+    name = parts.remove(parts.size() - 1)
+
+    for (String part in parts) {
+      config = config."$part"
     }
 
-    static getConfigProperty(String name) {
-        def value = SpringSocialTwitterUtils.config
-        for (String part in name.split('\\.')) {
-            value = value."$part"
-        }
-        value
+    config."$name" = value
+  }
+
+  static List asList(o) { o ? o as List : [] }
+
+  static ConfigObject getConfig() { CH.config.grails.plugins.springsocial }
+
+  static void setConfig(ConfigObject c) { CH.config.grails.plugins.springsocial = c }
+
+  static Map<String, List<String>> splitMap(Map<String, Object> m) {
+    Map<String, List<String>> split = [:]
+    m.each { String key, value ->
+      if (value instanceof List<?> || value.getClass().array) {
+        split[key] = value*.toString()
+      }
+      else { // String/GString
+        split[key] = [value.toString()]
+      }
     }
+    split
+  }
 
-    static void setConfigProperty(String name, value) {
-        def config = SpringSocialTwitterUtils.config
-        def parts = name.split('\\.') as List
-        name = parts.remove(parts.size() - 1)
-
-        for (String part in parts) {
-            config = config."$part"
-        }
-
-        config."$name" = value
-    }
-
-    static List asList(o) { o ? o as List : [] }
-
-    static ConfigObject getConfig() { CH.config.grails.plugins.springsocial }
-
-    static void setConfig(ConfigObject c) { CH.config.grails.plugins.springsocial = c }
-
-    static Map<String, List<String>> splitMap(Map<String, Object> m) {
-        Map<String, List<String>> split = [:]
-        m.each { String key, value ->
-            if (value instanceof List<?> || value.getClass().array) {
-                split[key] = value*.toString()
-            }
-            else { // String/GString
-                split[key] = [value.toString()]
-            }
-        }
-        split
-    }
-
-    private static lookupPropertyValue(o, String name) {
-        o."${getConfigProperty(name)}"
-    }
+  private static lookupPropertyValue(o, String name) {
+    o."${getConfigProperty(name)}"
+  }
 }
